@@ -1,5 +1,5 @@
 {
-  "name": "ts-nextjs-tailwind-starter",
+  "name": "nextjs-tailwind-ts-calculator",
   "version": "0.1.0",
   "private": true,
   "scripts": {
@@ -44,7 +44,6 @@
     "eslint-config-prettier": "^8.5.0",
     "eslint-plugin-simple-import-sort": "^7.0.0",
     "eslint-plugin-unused-imports": "^2.0.0",
-    "husky": "^7.0.4",
     "jest": "^27.5.1",
     "lint-staged": "^12.4.1",
     "next-sitemap": "^2.5.21",
