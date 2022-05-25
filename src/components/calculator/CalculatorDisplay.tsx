@@ -1,7 +1,7 @@
 import * as React from 'react';
 
 type Props = {
-  display: string;
+  display: string | null | undefined;
   children: React.ReactNode;
 };
 
