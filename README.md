@@ -10,4 +10,7 @@ I'm still learning both TypeScript and React. Converting a Javascript app into R
   
   ## Starter Template 
   <p>Next.js + Tailwind CSS + TypeScript starter packed with useful development features.</p>
+  
+  https://github.com/theodorusclarence/ts-nextjs-tailwind-starter
+  
   <p>Made by <a href="https://theodorusclarence.com">Theodorus Clarence</a></p>
