@@ -41,6 +41,13 @@
       U+2215, U+FEFF, U+FFFD;
   }
 
+  /* Seven Segment */
+  @font-face {
+    font-family: 'Seven Segment';
+    font-style: sans-serif;
+    src: url('/fonts/Seven Segment.ttf') format('truetype');
+  }
+
   .cursor-newtab {
     cursor: url('/images/new-tab.png') 10 10, pointer;
   }

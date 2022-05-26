@@ -17,6 +17,7 @@ module.exports = {
     extend: {
       fontFamily: {
         primary: ['Inter', ...fontFamily.sans],
+        segment: ['Seven Segment', ...fontFamily.sans],
       },
       colors: {
         primary: {

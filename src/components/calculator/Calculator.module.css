@@ -1,0 +1,25 @@
+/* For calculator display and buttons */
+.operatorBtn {
+  @apply select-none bg-primary-400 p-2 text-4xl font-bold transition-transform duration-100 ease-out hover:scale-95 active:scale-90;
+}
+
+.numberBtn {
+  @apply select-none bg-amber-300 p-2 text-4xl font-bold transition-transform duration-100 ease-out hover:scale-95 active:scale-90;
+}
+
+.equalBtn {
+  @apply row-span-4 select-none bg-orange-500 p-2 text-4xl font-bold transition-transform duration-100 ease-out hover:scale-95 active:scale-90;
+}
+
+.display {
+  @apply col-span-4 inline-block min-w-full select-none overflow-hidden truncate break-words bg-gray-400 p-2 pr-2 text-right align-middle text-5xl font-bold tabular-nums;
+}
+
+/* For debug tooltips */
+.tooltip {
+  @apply invisible absolute;
+}
+
+.hasTooltip:hover .tooltip {
+  @apply visible z-50;
+}
