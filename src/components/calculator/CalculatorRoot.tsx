@@ -1,5 +1,4 @@
 /* eslint-disable no-console */
-/* eslint-disable @typescript-eslint/no-non-null-assertion */
 import * as React from 'react';
 
 import styles from './Calculator.module.css';
@@ -11,43 +10,36 @@ import CalculatorKeys from '@/components/calculator/CalculatorKeys';
 //reference guide. it's in javascript but i'm converting it to typescript + react
 //https://www.freecodecamp.org/news/how-to-build-an-html-calculator-app-from-scratch-using-javascript-4454b8714b98
 const CalculatorRoot: React.FC = () => {
-  const [display, setDisplay] = React.useState<string | null | undefined>('0');
-  const [previousKeyType, setPreviousKeyType] = React.useState<
-    string | null | undefined
-  >('');
-  const [firstValue, setFirstValue] = React.useState<string | null | undefined>(
-    ''
-  );
-  const [operator, setOperator] = React.useState<string | null | undefined>('');
-  const [modValue, setModValue] = React.useState<string | null | undefined>('');
-  const [clearMode, setClearMode] = React.useState<string | null | undefined>(
-    'AC'
-  );
+  const [display, setDisplay] = React.useState<string>('0');
+  const [previousKeyType, setPreviousKeyType] = React.useState<string>('');
+  const [firstValue, setFirstValue] = React.useState<string>('');
+  const [operator, setOperator] = React.useState<string>('');
+  const [modValue, setModValue] = React.useState<string>('');
+  const [clearMode, setClearMode] = React.useState<string>('AC');
   const displayBoxRef = React.useRef<HTMLDivElement>(null);
   const [debug, setDebug] = React.useState(false);
 
-  const calculate = (
-    n1: string | null | undefined,
-    op: string | null | undefined,
-    n2: string | null | undefined
-  ) => {
-    const firstNum = parseFloat(n1 || '');
-    const secondNum = parseFloat(n2 || '');
+  const calculate = (n1: string, op: string, n2: string): string => {
+    const firstNum = parseFloat(n1);
+    const secondNum = parseFloat(n2);
+    let result = '';
     if (op === 'add') {
-      return (firstNum + secondNum).toString();
+      result = (firstNum + secondNum).toString();
     }
 
     if (op === 'subtract') {
-      return (firstNum - secondNum).toString();
+      result = (firstNum - secondNum).toString();
     }
 
     if (op === 'multiply') {
-      return (firstNum * secondNum).toString();
+      result = (firstNum * secondNum).toString();
     }
 
     if (op === 'divide') {
-      return (firstNum / secondNum).toString();
+      result = (firstNum / secondNum).toString();
     }
+
+    return result;
   };
 
   const resetStates = (): void => {
@@ -58,23 +50,40 @@ const CalculatorRoot: React.FC = () => {
     // setDisplay('0');
   };
 
-  const addToggledButtonStyling = (key: any): void => {
+  const addToggledButtonStyling = (
+    e: React.MouseEvent<HTMLButtonElement>
+  ): void => {
     // button styling for operator buttons when clicked
+    const key = e.currentTarget;
     key.classList.add('scale-90');
-    Array.from(key.parentNode.children).forEach((k: any) =>
+
+    if (null === key.parentNode) {
+      throw Error('key.parentNode is null');
+    }
+
+    Array.from(key.parentNode.children).forEach((k: Element) =>
       k.classList.remove('hover:scale-95')
     );
   };
 
-  const removeToggledButtonStyling = (key: any): void => {
+  const removeToggledButtonStyling = (
+    e: React.MouseEvent<HTMLButtonElement>
+  ): void => {
     // button styling for operator buttons when clicked
+    const key = e.currentTarget;
     key.classList.add('hover:scale-95');
-    Array.from(key.parentNode.children).forEach((k: any) => {
+
+    if (null === key.parentNode) {
+      throw Error('key.parentNode is null');
+    }
+
+    Array.from(key.parentNode.children).forEach((k: Element) => {
       k.classList.remove('scale-90');
     });
   };
 
-  const getKeyType = (key: any): string | null | undefined => {
+  const getKeyType = (e: React.MouseEvent<HTMLButtonElement>): string => {
+    const key = e.currentTarget;
     const { action } = key.dataset;
     if (!action) return 'number';
     if (
@@ -87,9 +96,13 @@ const CalculatorRoot: React.FC = () => {
     return action;
   };
 
-  const createResultString = (key: any, displayedNum: any) => {
+  const createResultString = (
+    e: React.MouseEvent<HTMLButtonElement>,
+    displayedNum: string
+  ) => {
+    const key = e.currentTarget;
     const keyContent = key.textContent;
-    const keyType = getKeyType(key);
+    const keyType = getKeyType(e);
     setPreviousKeyType(keyType);
 
     //Number keys
@@ -140,12 +153,13 @@ const CalculatorRoot: React.FC = () => {
     }
   };
 
-  const updateVisualState = (key: any) => {
-    const keyType = getKeyType(key);
-    removeToggledButtonStyling(key);
+  const updateVisualState = (e: React.MouseEvent<HTMLButtonElement>) => {
+    const key = e.currentTarget;
+    const keyType = getKeyType(e);
+    removeToggledButtonStyling(e);
 
     if (keyType === 'operator') {
-      addToggledButtonStyling(key);
+      addToggledButtonStyling(e);
     }
 
     if (keyType === 'clear' && key.textContent !== 'AC') {
@@ -158,18 +172,19 @@ const CalculatorRoot: React.FC = () => {
   };
 
   const updateCalculatorState = (
-    key: any,
-    calculatedValue: string | null | undefined,
-    displayedNum: string | null | undefined
+    e: React.MouseEvent<HTMLButtonElement>,
+    calculatedValue: string,
+    displayedNum: string
   ) => {
-    const action = key.dataset.action;
-    const keyType = getKeyType(key);
+    const key = e.currentTarget;
+    const action = key.dataset.action || '';
+    const keyType = getKeyType(e);
     setDisplay(calculatedValue);
     setPreviousKeyType(keyType);
 
     //update on keypress
     if (keyType === 'operator') {
-      setOperator(key.dataset.action);
+      setOperator(action);
       if (
         firstValue &&
         operator &&
@@ -217,16 +232,12 @@ const CalculatorRoot: React.FC = () => {
 
   const handleClick = (e: React.MouseEvent<HTMLButtonElement>) => {
     if (e.currentTarget.matches('button')) {
-      const key = e.currentTarget;
-      const displayedNum = displayBoxRef.current?.textContent;
+      const displayedNum = displayBoxRef.current?.textContent || '0';
 
-      const resultString = createResultString(
-        e.currentTarget as HTMLButtonElement,
-        displayedNum
-      );
+      const resultString = createResultString(e, displayedNum) || '0';
 
-      updateCalculatorState(key, resultString, displayedNum);
-      updateVisualState(key);
+      updateCalculatorState(e, resultString, displayedNum);
+      updateVisualState(e);
     }
   };
 
@@ -322,7 +333,7 @@ const CalculatorRoot: React.FC = () => {
                       className='text-blue-600 underline'
                       href='https://www.freecodecamp.org/news/how-to-build-an-html-calculator-app-from-scratch-using-javascript-4454b8714b98'
                     >
-                      Zell Liew's guide on Freecodecamp.org
+                      Zell Liew&apos;s guide on Freecodecamp.org
                     </a>
                   </p>
                 </div>
